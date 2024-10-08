@@ -73,6 +73,7 @@ public class ArrayBasedQueue<T> implements Queue<T> {
     this.values[this.back] = val;
     ++this.size;
     ++this.back;
+    this.back = this.back % values.length;
   } // put(T)
 
   @Override
