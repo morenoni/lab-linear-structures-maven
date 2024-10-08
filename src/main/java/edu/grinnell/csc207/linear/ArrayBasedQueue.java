@@ -28,6 +28,8 @@ public class ArrayBasedQueue<T> implements Queue<T> {
    * The number of elements in the queue.
    */
   int size;
+  int back;
+
 
   // +--------------+----------------------------------------------------
   // | Constructors |
@@ -46,6 +48,7 @@ public class ArrayBasedQueue<T> implements Queue<T> {
     this.values = (T[]) new Object[capacity];
     this.front = 0;
     this.size = 0;
+    this.back = 0;
   } // ArayBasedQueue(int capacity)
 
   // +---------------+---------------------------------------------------
@@ -59,7 +62,7 @@ public class ArrayBasedQueue<T> implements Queue<T> {
 
   @Override
   public boolean isFull() {
-    return this.back() >= this.values.length;
+    return this.size >= this.values.length;
   } // isFull()
 
   @Override
@@ -67,8 +70,9 @@ public class ArrayBasedQueue<T> implements Queue<T> {
     if (this.isFull()) {
       throw new Exception("no more room!");
     } // this.isFull()
-    this.values[this.back()] = val;
+    this.values[this.back] = val;
     ++this.size;
+    ++this.back;
   } // put(T)
 
   @Override
@@ -107,20 +111,7 @@ public class ArrayBasedQueue<T> implements Queue<T> {
   public Iterator<T> iterator() {
     return new ArrayBasedQueueIterator<T>(this);
   } // iterator()
-
-  // +----------------+--------------------------------------------------
-  // | Helper Methods |
-  // +----------------+
-
-  /**
-   * Get the index of the back of the queue. The back is where we add the next element.
-   */
-  int back() {
-    return this.size;
-  } // back()
-
 } // class ArrayBasedQueue<T>
-
 
 class ArrayBasedQueueIterator<T> implements Iterator<T> {
   // +--------+----------------------------------------------------------
