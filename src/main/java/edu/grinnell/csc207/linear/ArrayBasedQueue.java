@@ -1,5 +1,6 @@
 package edu.grinnell.csc207.linear;
 
+import java.io.PrintWriter;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -30,6 +31,7 @@ public class ArrayBasedQueue<T> implements Queue<T> {
   int size;
   int back;
 
+  PrintWriter pen;
 
   // +--------------+----------------------------------------------------
   // | Constructors |
@@ -50,6 +52,8 @@ public class ArrayBasedQueue<T> implements Queue<T> {
     this.size = 0;
     this.back = 0;
   } // ArayBasedQueue(int capacity)
+
+
 
   // +---------------+---------------------------------------------------
   // | Queue Methods |
@@ -119,6 +123,8 @@ class ArrayBasedQueueIterator<T> implements Iterator<T> {
   // | Fields |
   // +--------+
 
+  ArrayBasedQueue<T> abq;
+  int i;
   // +--------------+----------------------------------------------------
   // | Constructors |
   // +--------------+
@@ -126,8 +132,9 @@ class ArrayBasedQueueIterator<T> implements Iterator<T> {
   /**
    * Create a new iterator.
    */
-  public ArrayBasedQueueIterator(ArrayBasedQueue<T> q) {
-    // STUB
+  public ArrayBasedQueueIterator(ArrayBasedQueue<T> abq) {
+    this.abq = abq;
+    this.i = abq.front;
   } // ArrayBasedQueueIterator
 
   // +---------+---------------------------------------------------------
@@ -137,16 +144,16 @@ class ArrayBasedQueueIterator<T> implements Iterator<T> {
   @Override
   public T next() throws NoSuchElementException {
     if (!this.hasNext()) {
-      throw new NoSuchElementException("no elements remain");
-    } // if no elements
-    // STUB
-    throw new NoSuchElementException("unimplemented");
+      throw new NoSuchElementException("No more elements in the queue.");
+    } 
+    T nextValue = abq.values[i];
+    i = (i + 1) % abq.values.length;
+    return nextValue;
   } // next()
 
   @Override
   public boolean hasNext() {
-    // STUB
-    return false;
+    return i != (abq.back % abq.values.length);
   } // hasNext()
 
   @Override
