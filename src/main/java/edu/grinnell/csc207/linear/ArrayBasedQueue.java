@@ -145,19 +145,31 @@ class ArrayBasedQueueIterator<T> implements Iterator<T> {
   public T next() throws NoSuchElementException {
     if (!this.hasNext()) {
       throw new NoSuchElementException("No more elements in the queue.");
-    } 
+    }
     T nextValue = abq.values[i];
-    i = (i + 1) % abq.values.length;
+    i = (i + 1) % abq.values.length;  
     return nextValue;
   } // next()
 
   @Override
   public boolean hasNext() {
-    return i != (abq.back % abq.values.length);
+    return i != abq.back;
   } // hasNext()
 
   @Override
-  public void remove() throws UnsupportedOperationException {
-    throw new UnsupportedOperationException();
+  public void remove() throws IllegalStateException {
+    if (abq.size == 0) {
+      throw new IllegalStateException("Queue is empty, nothing to remove.");
+    }
+    int removeIndex = (i - 1 + abq.values.length) % abq.values.length;
+    for (int j = removeIndex; j != abq.back; j = (j + 1) % abq.values.length) {
+      abq.values[j] = abq.values[(j + 1) % abq.values.length];
+    }
+    abq.back = (abq.back - 1 + abq.values.length) % abq.values.length;
+    abq.values[abq.back] = null;
+    abq.size--;
+    i = (i - 1 + abq.values.length) % abq.values.length;
   } // remove()
 } // ArrayBasedQueueIterator<T>
+
+
