@@ -123,8 +123,9 @@ class ArrayBasedQueueIterator<T> implements Iterator<T> {
   // | Fields |
   // +--------+
 
-  ArrayBasedQueue<T> abq;
+  ArrayBasedQueue<T> arrayQueue;
   int i;
+
   // +--------------+----------------------------------------------------
   // | Constructors |
   // +--------------+
@@ -132,9 +133,9 @@ class ArrayBasedQueueIterator<T> implements Iterator<T> {
   /**
    * Create a new iterator.
    */
-  public ArrayBasedQueueIterator(ArrayBasedQueue<T> abq) {
-    this.abq = abq;
-    this.i = abq.front;
+  public ArrayBasedQueueIterator(ArrayBasedQueue<T> arrayQueue) {
+    this.arrayQueue = arrayQueue;
+    this.i = arrayQueue.front;
   } // ArrayBasedQueueIterator
 
   // +---------+---------------------------------------------------------
@@ -146,29 +147,29 @@ class ArrayBasedQueueIterator<T> implements Iterator<T> {
     if (!this.hasNext()) {
       throw new NoSuchElementException("No more elements in the queue.");
     }
-    T nextValue = abq.values[i];
-    i = (i + 1) % abq.values.length;  
+    T nextValue = arrayQueue.values[i];
+    i = (i + 1) % arrayQueue.values.length;  
     return nextValue;
   } // next()
 
   @Override
   public boolean hasNext() {
-    return i != abq.back;
+    return i != arrayQueue.back;
   } // hasNext()
 
   @Override
-  public void remove() throws IllegalStateException {
-    if (abq.size == 0) {
-      throw new IllegalStateException("Queue is empty, nothing to remove.");
+  public void remove() throws UnsupportedOperationException {
+    if (arrayQueue.size == 0) {
+      throw new UnsupportedOperationException("Queue is empty, nothing to remove.");
     }
-    int removeIndex = (i - 1 + abq.values.length) % abq.values.length;
-    for (int j = removeIndex; j != abq.back; j = (j + 1) % abq.values.length) {
-      abq.values[j] = abq.values[(j + 1) % abq.values.length];
+    int removeIndex = (i - 1 + arrayQueue.values.length) % arrayQueue.values.length;
+    for (int j = removeIndex; j != arrayQueue.back; j = (j + 1) % arrayQueue.values.length) {
+      arrayQueue.values[j] = arrayQueue.values[(j + 1) % arrayQueue.values.length];
     }
-    abq.back = (abq.back - 1 + abq.values.length) % abq.values.length;
-    abq.values[abq.back] = null;
-    abq.size--;
-    i = (i - 1 + abq.values.length) % abq.values.length;
+    arrayQueue.back = (arrayQueue.back - 1 + arrayQueue.values.length) % arrayQueue.values.length;
+    arrayQueue.values[arrayQueue.back] = null;
+    arrayQueue.size--;
+    i = (i - 1 + arrayQueue.values.length) % arrayQueue.values.length;
   } // remove()
 } // ArrayBasedQueueIterator<T>
 
